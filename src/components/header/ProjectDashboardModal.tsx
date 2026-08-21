@@ -75,7 +75,7 @@ export const ProjectDashboardModal: React.FC = () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${p.name.toLowerCase().replace(/\s+/g, '_')}_vidforge.json`;
+    a.download = `${p.name.toLowerCase().replace(/\s+/g, '_')}_vidsync.json`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -89,7 +89,7 @@ export const ProjectDashboardModal: React.FC = () => {
       try {
         const imported = JSON.parse(event.target?.result as string) as Project;
         if (!imported.id || !imported.tracks) {
-          alert('Invalid VidForge project file.');
+          alert('Invalid VidSync project file.');
           return;
         }
         imported.id = 'proj_' + Math.random().toString(36).substring(2, 9);
@@ -118,7 +118,7 @@ export const ProjectDashboardModal: React.FC = () => {
             </div>
             <div>
               <h2 className="text-lg font-bold text-slate-100">Project Manager</h2>
-              <p className="text-xs text-slate-400">Save, restore, or export your VidForge projects</p>
+              <p className="text-xs text-slate-400">Save, restore, or export your VidSync projects</p>
             </div>
           </div>
 

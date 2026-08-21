@@ -61,7 +61,7 @@ export const Header: React.FC = () => {
           </div>
           <div className="flex items-center gap-1.5">
             <span className="font-extrabold text-base tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent">
-              VidForge
+              VidSync
             </span>
             <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-editor-accent/20 border border-editor-accent/40 text-editor-cyan tracking-wider">
               PRO

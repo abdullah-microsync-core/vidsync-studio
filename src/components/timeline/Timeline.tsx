@@ -38,7 +38,7 @@ export const Timeline: React.FC = () => {
 
         {/* Right Scrollable Lanes & Ruler Container */}
         <div
-          id="vidforge-timeline-lanes"
+          id="vidsync-timeline-lanes"
           ref={lanesScrollRef}
           className="flex-1 overflow-x-auto overflow-y-auto relative bg-editor-bg"
         >

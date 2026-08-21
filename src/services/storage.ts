@@ -2,9 +2,9 @@ import { get, set, del, keys } from 'idb-keyval';
 import { Project, MediaAsset } from '../types/editor';
 import { STOCK_VIDEOS, STOCK_IMAGES, STOCK_AUDIO_TRACKS } from './stockAssets';
 
-const PROJECT_PREFIX = 'vidforge_proj_';
-const ASSET_BLOB_PREFIX = 'vidforge_blob_';
-const LAST_ACTIVE_KEY = 'vidforge_last_active_project';
+const PROJECT_PREFIX = 'vidsync_proj_';
+const ASSET_BLOB_PREFIX = 'vidsync_blob_';
+const LAST_ACTIVE_KEY = 'vidsync_last_active_project';
 
 // Mappings for old CORS-blocked stock videos
 const LEGACY_URL_MAPPING: { pattern: string; newUrl: string }[] = [

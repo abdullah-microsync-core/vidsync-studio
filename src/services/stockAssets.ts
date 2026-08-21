@@ -216,7 +216,7 @@ export const TEXT_TEMPLATES: TextTemplate[] = [
     id: 'tpl_bold_title',
     name: 'Cinematic Bold Title',
     category: 'Titles',
-    text: 'VIDFORGE STUDIO',
+    text: 'VIDSYNC STUDIO',
     fontFamily: 'Montserrat',
     fontSize: 54,
     color: '#ffffff',

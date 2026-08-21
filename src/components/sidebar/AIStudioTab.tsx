@@ -26,7 +26,7 @@ export const AIStudioTab: React.FC = () => {
   const [captionStyle, setCaptionStyle] = useState<'karaoke' | 'pop' | 'typewriter' | 'glow'>('karaoke');
 
   // AI Voiceover state
-  const [voiceText, setVoiceText] = useState('Welcome to VidForge Studio. Create cinematic videos right in your browser.');
+  const [voiceText, setVoiceText] = useState('Welcome to VidSync Studio. Create cinematic videos right in your browser.');
   const [voices, setVoices] = useState<VoiceOption[]>([]);
   const [selectedVoice, setSelectedVoice] = useState<string>('');
   const [pitch, setPitch] = useState(1.0);

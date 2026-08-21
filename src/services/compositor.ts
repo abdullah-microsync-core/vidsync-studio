@@ -23,7 +23,7 @@ export class VideoCompositor {
       this.hiddenContainer.style.height = '1px';
       this.hiddenContainer.style.opacity = '0';
       this.hiddenContainer.style.pointerEvents = 'none';
-      this.hiddenContainer.id = 'vidforge-media-pool';
+      this.hiddenContainer.id = 'vidsync-media-pool';
       document.body.appendChild(this.hiddenContainer);
     }
   }

@@ -17,7 +17,7 @@ export const Playhead: React.FC<PlayheadProps> = ({ timelineHeight }) => {
 
     const onMouseMove = (moveEvent: MouseEvent) => {
       // Find relative X position from timeline body
-      const timelineEl = document.getElementById('vidforge-timeline-lanes');
+      const timelineEl = document.getElementById('vidsync-timeline-lanes');
       if (!timelineEl) return;
 
       const rect = timelineEl.getBoundingClientRect();

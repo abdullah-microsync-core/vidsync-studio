@@ -1,6 +1,6 @@
-# 🎬 VidForge Studio — Professional Browser-Based Video Editor
+# 🎬 VidSync Studio — Professional Browser-Based Video Editor
 
-**VidForge** is a fast, lightweight, and professional browser-based video editing web application built with **React**, **TypeScript**, **Tailwind CSS**, and **HTML5 Canvas & Web Audio API**. It provides a CapCut / DaVinci Resolve-inspired multi-track editing experience that runs 100% locally in the browser with no server or desktop install required.
+**VidSync** is a fast, lightweight, and professional browser-based video editing web application built with **React**, **TypeScript**, **Tailwind CSS**, and **HTML5 Canvas & Web Audio API**. It provides a CapCut / DaVinci Resolve-inspired multi-track editing experience that runs 100% locally in the browser with no server or desktop install required.
 
 ---
 

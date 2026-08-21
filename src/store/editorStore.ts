@@ -103,7 +103,7 @@ export const createDefaultProject = (): Project => {
         fadeOut: 0,
         transform: { x: 0, y: -20, scale: 1.0, rotation: 0, opacity: 1.0, blendMode: 'normal' },
         text: {
-          text: 'WELCOME TO VIDFORGE',
+          text: 'WELCOME TO VIDSYNC',
           fontFamily: 'Montserrat',
           fontSize: 48,
           color: '#ffffff',
