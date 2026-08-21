@@ -22,10 +22,11 @@ export const Timeline: React.FC = () => {
       {/* Main Multi-Track Scroll Area */}
       <div className="flex-1 flex min-h-0 overflow-hidden relative">
         {/* Left Fixed Track Headers */}
-        <div className="w-48 shrink-0 flex flex-col bg-editor-panel border-r border-editor-border overflow-hidden z-20 shadow-md">
+        <div className="w-24 md:w-48 shrink-0 flex flex-col bg-editor-panel border-r border-editor-border overflow-hidden z-20 shadow-md">
           {/* Header spacer aligned with ruler */}
-          <div className="h-7 bg-editor-darker border-b border-editor-border px-3 flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-slate-400">
-            <span>Tracks ({project.tracks.length})</span>
+          <div className="h-7 bg-editor-darker border-b border-editor-border px-2 md:px-3 flex items-center justify-center md:justify-between text-[10px] font-bold uppercase tracking-wider text-slate-400">
+            <span className="hidden md:inline">Tracks ({project.tracks.length})</span>
+            <span className="md:hidden">{project.tracks.length} Tracks</span>
           </div>
 
           {/* List of track headers */}

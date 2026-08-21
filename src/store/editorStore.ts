@@ -216,6 +216,7 @@ export interface EditorStore {
   selectedTrackId: string | null;
   snappingEnabled: boolean;
   activeSidebarTab: SidebarTab;
+  isSidebarOpen: boolean;
   history: HistoryState;
   isExportModalOpen: boolean;
   isProjectModalOpen: boolean;
@@ -234,6 +235,7 @@ export interface EditorStore {
   selectTrack: (trackId: string | null) => void;
   setSnappingEnabled: (enabled: boolean) => void;
   setActiveSidebarTab: (tab: SidebarTab) => void;
+  setIsSidebarOpen: (isOpen: boolean) => void;
   setExportModalOpen: (open: boolean) => void;
   setProjectModalOpen: (open: boolean) => void;
   setAudioLevels: (levels: { left: number; right: number }) => void;
@@ -299,6 +301,7 @@ export const useEditorStore = create<EditorStore>((set, get) => {
     selectedTrackId: null,
     snappingEnabled: true,
     activeSidebarTab: 'media',
+    isSidebarOpen: false,
     history: { past: [], future: [] },
     isExportModalOpen: false,
     isProjectModalOpen: false,
@@ -348,7 +351,8 @@ export const useEditorStore = create<EditorStore>((set, get) => {
 
     setSnappingEnabled: (snappingEnabled) => set({ snappingEnabled }),
 
-    setActiveSidebarTab: (activeSidebarTab) => set({ activeSidebarTab }),
+    setActiveSidebarTab: (activeSidebarTab) => set({ activeSidebarTab, isSidebarOpen: true }),
+    setIsSidebarOpen: (isSidebarOpen) => set({ isSidebarOpen }),
 
     setExportModalOpen: (isExportModalOpen) => set({ isExportModalOpen }),
 

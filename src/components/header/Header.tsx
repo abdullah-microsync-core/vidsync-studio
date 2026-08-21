@@ -59,7 +59,7 @@ export const Header: React.FC = () => {
           <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 flex items-center justify-center text-white shadow-lg shadow-indigo-500/30">
             <Film className="w-4 h-4" />
           </div>
-          <div className="flex items-center gap-1.5">
+          <div className="hidden sm:flex items-center gap-1.5">
             <span className="font-extrabold text-base tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent">
               VidSync
             </span>
@@ -82,7 +82,7 @@ export const Header: React.FC = () => {
                 onBlur={handleTitleSubmit}
                 onKeyDown={handleKeyDown}
                 autoFocus
-                className="px-2 py-1 text-xs font-semibold rounded bg-editor-card border border-editor-accent text-slate-100 outline-none w-48"
+                className="px-2 py-1 text-xs font-semibold rounded bg-editor-card border border-editor-accent text-slate-100 outline-none w-24 sm:w-48"
               />
               <button
                 onClick={handleTitleSubmit}
@@ -100,7 +100,7 @@ export const Header: React.FC = () => {
               className="flex items-center gap-1.5 text-xs font-semibold text-slate-200 hover:text-white px-2 py-1 rounded-lg hover:bg-editor-hover transition-colors"
               title="Click to rename project"
             >
-              <span className="truncate max-w-[180px]">{project.name}</span>
+              <span className="truncate max-w-[80px] sm:max-w-[180px]">{project.name}</span>
               <Edit3 className="w-3 h-3 text-slate-500" />
             </button>
           )}
@@ -113,7 +113,7 @@ export const Header: React.FC = () => {
       </div>
 
       {/* Center: Undo/Redo & Aspect Ratio */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-1.5 md:gap-3">
         <div className="flex items-center bg-editor-card border border-editor-border rounded-lg p-0.5">
           <button
             onClick={undo}
@@ -137,7 +137,7 @@ export const Header: React.FC = () => {
       </div>
 
       {/* Right: Project Manager & Export Button */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-1.5 md:gap-3">
         <button
           onClick={() => setProjectModalOpen(true)}
           className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-editor-card hover:bg-editor-hover border border-editor-border text-xs font-semibold text-slate-200 transition-colors"
@@ -152,7 +152,7 @@ export const Header: React.FC = () => {
           className="flex items-center gap-2 px-4 py-1.5 rounded-lg bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white text-xs font-bold shadow-lg shadow-indigo-500/30 transition-all hover:scale-105 active:scale-95"
         >
           <Download className="w-4 h-4" />
-          <span>Export Video</span>
+          <span className="hidden sm:inline">Export</span>
         </button>
       </div>
     </header>

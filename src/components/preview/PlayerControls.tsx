@@ -76,10 +76,10 @@ export const PlayerControls: React.FC<PlayerControlsProps> = ({
     <div className="h-12 border-t border-editor-border bg-editor-panel/90 backdrop-blur-md px-4 flex items-center justify-between select-none z-20">
       {/* Left: Timecode Display */}
       <div className="flex items-center gap-3">
-        <div className="flex items-center gap-2 bg-editor-darker px-3 py-1 rounded-lg border border-editor-border font-mono text-xs text-editor-cyan font-bold tracking-wider shadow-inner">
+        <div className="flex items-center gap-1 sm:gap-2 bg-editor-darker px-2 sm:px-3 py-1 rounded-lg border border-editor-border font-mono text-[10px] sm:text-xs text-editor-cyan font-bold tracking-wider shadow-inner">
           <span>{formatTimecode(currentTime, project.fps)}</span>
           <span className="text-slate-500">/</span>
-          <span className="text-slate-400">{formatTimecode(project.duration, project.fps)}</span>
+          <span className="hidden sm:inline text-slate-400">{formatTimecode(project.duration, project.fps)}</span>
         </div>
 
         {/* Audio VU Meter (Left/Right bars) */}
@@ -109,7 +109,7 @@ export const PlayerControls: React.FC<PlayerControlsProps> = ({
         {/* Jump to start */}
         <button
           onClick={() => setCurrentTime(0)}
-          className="p-1.5 rounded-lg hover:bg-editor-hover text-slate-400 hover:text-slate-200 transition-colors"
+          className="hidden sm:block p-1.5 rounded-lg hover:bg-editor-hover text-slate-400 hover:text-slate-200 transition-colors"
           title="Jump to Start (Home)"
         >
           <SkipBack className="w-4 h-4" />
@@ -149,7 +149,7 @@ export const PlayerControls: React.FC<PlayerControlsProps> = ({
         {/* Jump to end */}
         <button
           onClick={() => setCurrentTime(project.duration)}
-          className="p-1.5 rounded-lg hover:bg-editor-hover text-slate-400 hover:text-slate-200 transition-colors"
+          className="hidden sm:block p-1.5 rounded-lg hover:bg-editor-hover text-slate-400 hover:text-slate-200 transition-colors"
           title="Jump to End (End)"
         >
           <SkipForward className="w-4 h-4" />
@@ -158,7 +158,7 @@ export const PlayerControls: React.FC<PlayerControlsProps> = ({
         {/* Loop toggle */}
         <button
           onClick={() => setIsLooping(!isLooping)}
-          className={`p-1.5 rounded-lg transition-colors ${
+          className={`hidden sm:block p-1.5 rounded-lg transition-colors ${
             isLooping ? 'bg-editor-accent/20 text-editor-cyan' : 'hover:bg-editor-hover text-slate-400'
           }`}
           title="Toggle Loop Playback"
@@ -189,7 +189,7 @@ export const PlayerControls: React.FC<PlayerControlsProps> = ({
               setMasterVolume(Number(e.target.value));
               audioEngine.setMasterVolume(Number(e.target.value));
             }}
-            className="w-16 h-1 bg-editor-darker rounded cursor-pointer"
+            className="hidden sm:block w-16 h-1 bg-editor-darker rounded cursor-pointer"
             title={`Master Volume: ${Math.round(masterVolume * 100)}%`}
           />
         </div>

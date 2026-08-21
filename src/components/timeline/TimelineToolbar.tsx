@@ -49,33 +49,33 @@ export const TimelineToolbar: React.FC = () => {
         <button
           onClick={() => selectedClipId && splitClip(selectedClipId)}
           disabled={!selectedClipId}
-          className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-editor-card hover:bg-editor-hover border border-editor-border text-xs font-semibold text-slate-200 disabled:opacity-40 disabled:hover:bg-editor-card transition-colors"
+          className="flex items-center gap-1.5 px-2 md:px-2.5 py-1 rounded-lg bg-editor-card hover:bg-editor-hover border border-editor-border text-xs font-semibold text-slate-200 disabled:opacity-40 disabled:hover:bg-editor-card transition-colors"
           title="Split Selected Clip at Playhead (S)"
         >
           <Scissors className="w-3.5 h-3.5 text-editor-amber" />
-          <span>Split (S)</span>
+          <span className="hidden md:inline">Split (S)</span>
         </button>
 
         {/* Duplicate */}
         <button
           onClick={() => selectedClipId && duplicateClip(selectedClipId)}
           disabled={!selectedClipId}
-          className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-editor-card hover:bg-editor-hover border border-editor-border text-xs font-semibold text-slate-200 disabled:opacity-40 disabled:hover:bg-editor-card transition-colors"
+          className="flex items-center gap-1.5 px-2 md:px-2.5 py-1 rounded-lg bg-editor-card hover:bg-editor-hover border border-editor-border text-xs font-semibold text-slate-200 disabled:opacity-40 disabled:hover:bg-editor-card transition-colors"
           title="Duplicate Clip (Ctrl+D)"
         >
           <Copy className="w-3.5 h-3.5 text-editor-cyan" />
-          <span className="hidden sm:inline">Duplicate</span>
+          <span className="hidden md:inline">Duplicate</span>
         </button>
 
         {/* Delete */}
         <button
           onClick={() => selectedClipId && deleteClip(selectedClipId)}
           disabled={!selectedClipId}
-          className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-editor-card hover:bg-red-500/20 hover:border-red-500/40 border border-editor-border text-xs font-semibold text-slate-200 hover:text-red-300 disabled:opacity-40 disabled:hover:bg-editor-card transition-colors"
+          className="flex items-center gap-1.5 px-2 md:px-2.5 py-1 rounded-lg bg-editor-card hover:bg-red-500/20 hover:border-red-500/40 border border-editor-border text-xs font-semibold text-slate-200 hover:text-red-300 disabled:opacity-40 disabled:hover:bg-editor-card transition-colors"
           title="Delete Clip (Delete / Backspace)"
         >
           <Trash2 className="w-3.5 h-3.5 text-editor-rose" />
-          <span className="hidden sm:inline">Delete</span>
+          <span className="hidden md:inline">Delete</span>
         </button>
 
         <div className="h-4 w-px bg-editor-border mx-1" />
@@ -83,7 +83,7 @@ export const TimelineToolbar: React.FC = () => {
         {/* Snapping Toggle */}
         <button
           onClick={() => setSnappingEnabled(!snappingEnabled)}
-          className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs font-semibold transition-colors ${
+          className={`flex items-center gap-1.5 px-2 md:px-2.5 py-1 rounded-lg border text-xs font-semibold transition-colors ${
             snappingEnabled
               ? 'bg-editor-accent/20 border-editor-accent/40 text-editor-cyan'
               : 'bg-editor-card hover:bg-editor-hover border-editor-border text-slate-400'
@@ -101,10 +101,10 @@ export const TimelineToolbar: React.FC = () => {
         <div className="relative">
           <button
             onClick={() => setIsAddTrackOpen(!isAddTrackOpen)}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-editor-card hover:bg-editor-hover border border-editor-border text-xs font-semibold text-slate-200 transition-colors"
+            className="flex items-center gap-1.5 px-2 md:px-2.5 py-1 rounded-lg bg-editor-card hover:bg-editor-hover border border-editor-border text-xs font-semibold text-slate-200 transition-colors"
           >
             <Plus className="w-3.5 h-3.5 text-editor-cyan" />
-            <span>Add Track</span>
+            <span className="hidden sm:inline">Add Track</span>
           </button>
 
           {isAddTrackOpen && (
@@ -139,7 +139,7 @@ export const TimelineToolbar: React.FC = () => {
         <div className="h-4 w-px bg-editor-border" />
 
         {/* Timeline Zoom Controls */}
-        <div className="flex items-center gap-1.5 text-slate-400">
+        <div className="hidden sm:flex items-center gap-1.5 text-slate-400">
           <button
             onClick={() => setZoom(zoom - 10)}
             className="p-1 rounded hover:bg-editor-hover hover:text-slate-200"

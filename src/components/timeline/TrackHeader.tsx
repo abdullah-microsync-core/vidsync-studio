@@ -47,15 +47,15 @@ export const TrackHeader: React.FC<TrackHeaderProps> = ({ track }) => {
   return (
     <div
       onClick={() => selectTrack(track.id)}
-      className={`w-48 h-16 shrink-0 border-r border-b border-editor-border px-3 py-2 flex flex-col justify-between select-none transition-colors ${
+      className={`group w-24 md:w-48 h-16 shrink-0 border-r border-b border-editor-border px-1.5 md:px-3 py-1.5 md:py-2 flex flex-col justify-between select-none transition-colors ${
         isSelected ? 'bg-editor-active border-r-editor-accent' : 'bg-editor-panel/90 hover:bg-editor-hover'
       }`}
     >
       {/* Top row: Icon, Name & Delete */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1.5 overflow-hidden">
+        <div className="flex items-center gap-1 md:gap-1.5 overflow-hidden w-full md:w-auto">
           <Icon className="w-3.5 h-3.5 text-editor-cyan shrink-0" />
-          <span className="text-xs font-bold text-slate-200 truncate tracking-tight">{track.name}</span>
+          <span className="text-[10px] md:text-xs font-bold text-slate-200 truncate tracking-tight">{track.name}</span>
         </div>
 
         <button
@@ -64,7 +64,7 @@ export const TrackHeader: React.FC<TrackHeaderProps> = ({ track }) => {
             deleteTrack(track.id);
           }}
           title="Delete Track"
-          className="p-1 rounded hover:bg-red-500/20 text-slate-500 hover:text-red-400 opacity-0 group-hover:opacity-100 hover:opacity-100 transition-opacity"
+          className="hidden md:block p-1 rounded hover:bg-red-500/20 text-slate-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
         >
           <Trash2 className="w-3 h-3" />
         </button>
@@ -72,7 +72,7 @@ export const TrackHeader: React.FC<TrackHeaderProps> = ({ track }) => {
 
       {/* Bottom row: Mute, Hide, Lock, Volume */}
       <div className="flex items-center justify-between text-slate-400">
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-0.5 md:gap-1">
           {/* Mute */}
           <button
             onClick={(e) => {
@@ -126,7 +126,7 @@ export const TrackHeader: React.FC<TrackHeaderProps> = ({ track }) => {
             value={track.volume ?? 1.0}
             onClick={(e) => e.stopPropagation()}
             onChange={(e) => setTrackVolume(track.id, Number(e.target.value))}
-            className="w-12 h-1 bg-editor-darker rounded cursor-pointer"
+            className="hidden md:block w-12 h-1 bg-editor-darker rounded cursor-pointer"
             title={`Track Volume: ${Math.round((track.volume ?? 1) * 100)}%`}
           />
         )}

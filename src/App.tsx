@@ -135,14 +135,15 @@ export const App: React.FC = () => {
       {/* Top Header */}
       <Header />
 
-      {/* Center Studio (Sidebar + Preview Player) */}
-      <div className="flex-1 flex min-h-0 overflow-hidden">
+      {/* Main Studio Area */}
+      <div className="flex-1 flex flex-col md:flex-row min-h-0 overflow-hidden relative pb-16 md:pb-0">
         <Sidebar />
-        <PreviewPlayer />
+        
+        <div className="flex-1 flex flex-col min-w-0 min-h-0 overflow-hidden">
+          <PreviewPlayer />
+          <Timeline />
+        </div>
       </div>
-
-      {/* Bottom Multi-Track Timeline */}
-      <Timeline />
 
       {/* Modals */}
       <ExportModal />
