@@ -56,7 +56,7 @@ export const Header: React.FC = () => {
       {/* Left: Brand + Project Title */}
       <div className="flex items-center gap-4">
         <div className="flex items-center">
-          <img src="/logo.jpg" alt="VidSync Studio" className="h-8 object-contain rounded" />
+          <img src="/logo.jpg" alt="VidSync Studio" className="h-12 w-auto object-contain rounded-md" />
         </div>
 
         <div className="h-4 w-px bg-editor-border" />
