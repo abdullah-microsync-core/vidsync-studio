@@ -55,18 +55,8 @@ export const Header: React.FC = () => {
     <header className="h-14 border-b border-editor-border bg-editor-panel/95 backdrop-blur-md px-4 flex items-center justify-between select-none z-30">
       {/* Left: Brand + Project Title */}
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 flex items-center justify-center text-white shadow-lg shadow-indigo-500/30">
-            <Film className="w-4 h-4" />
-          </div>
-          <div className="hidden sm:flex items-center gap-1.5">
-            <span className="font-extrabold text-base tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent">
-              VidSync
-            </span>
-            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-editor-accent/20 border border-editor-accent/40 text-editor-cyan tracking-wider">
-              PRO
-            </span>
-          </div>
+        <div className="flex items-center">
+          <img src="/logo.jpg" alt="VidSync Studio" className="h-8 object-contain rounded" />
         </div>
 
         <div className="h-4 w-px bg-editor-border" />
