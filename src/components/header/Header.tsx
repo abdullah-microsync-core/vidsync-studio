@@ -52,17 +52,17 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="h-14 border-b border-editor-border bg-editor-panel/95 backdrop-blur-md px-4 flex items-center justify-between select-none z-30">
+    <header className="h-14 border-b border-editor-border bg-editor-panel/95 backdrop-blur-md px-2 sm:px-4 flex items-center justify-between select-none z-30">
       {/* Left: Brand + Project Title */}
-      <div className="flex items-center gap-4">
-        <div className="flex items-center">
-          <img src="/logo.jpg" alt="VidSync Studio" className="h-12 w-auto object-contain rounded-md" />
+      <div className="flex items-center gap-2 sm:gap-4 min-w-0">
+        <div className="flex items-center shrink-0">
+          <img src="/logo.jpg" alt="VidSync Studio" className="h-10 sm:h-12 w-auto object-contain rounded-md" />
         </div>
 
-        <div className="h-4 w-px bg-editor-border" />
+        <div className="hidden sm:block h-4 w-px bg-editor-border" />
 
         {/* Project Name Editor */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 min-w-0">
           {isEditingTitle ? (
             <div className="flex items-center gap-1">
               <input
@@ -87,11 +87,11 @@ export const Header: React.FC = () => {
                 setTitleInput(project.name);
                 setIsEditingTitle(true);
               }}
-              className="flex items-center gap-1.5 text-xs font-semibold text-slate-200 hover:text-white px-2 py-1 rounded-lg hover:bg-editor-hover transition-colors"
+              className="flex items-center gap-1.5 text-xs font-semibold text-slate-200 hover:text-white px-2 py-1 rounded-lg hover:bg-editor-hover transition-colors min-w-0"
               title="Click to rename project"
             >
               <span className="truncate max-w-[80px] sm:max-w-[180px]">{project.name}</span>
-              <Edit3 className="w-3 h-3 text-slate-500" />
+              <Edit3 className="w-3 h-3 text-slate-500 shrink-0" />
             </button>
           )}
 
@@ -103,7 +103,7 @@ export const Header: React.FC = () => {
       </div>
 
       {/* Center: Undo/Redo & Aspect Ratio */}
-      <div className="flex items-center gap-1.5 md:gap-3">
+      <div className="flex items-center gap-1.5 md:gap-3 shrink-0">
         <div className="flex items-center bg-editor-card border border-editor-border rounded-lg p-0.5">
           <button
             onClick={undo}
@@ -127,7 +127,7 @@ export const Header: React.FC = () => {
       </div>
 
       {/* Right: Project Manager & Export Button */}
-      <div className="flex items-center gap-1.5 md:gap-3">
+      <div className="flex items-center gap-1.5 md:gap-3 shrink-0">
         <button
           onClick={() => setProjectModalOpen(true)}
           className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-editor-card hover:bg-editor-hover border border-editor-border text-xs font-semibold text-slate-200 transition-colors"
@@ -139,9 +139,9 @@ export const Header: React.FC = () => {
 
         <button
           onClick={() => setExportModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-1.5 rounded-lg bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white text-xs font-bold shadow-lg shadow-indigo-500/30 transition-all hover:scale-105 active:scale-95"
+          className="flex items-center gap-2 px-2.5 sm:px-4 py-1.5 rounded-lg bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white text-xs font-bold shadow-lg shadow-indigo-500/30 transition-all hover:scale-105 active:scale-95"
         >
-          <Download className="w-4 h-4" />
+          <Download className="w-4 h-4 shrink-0" />
           <span className="hidden sm:inline">Export</span>
         </button>
       </div>
