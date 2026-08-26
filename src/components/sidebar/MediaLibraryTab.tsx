@@ -51,11 +51,23 @@ export const MediaLibraryTab: React.FC = () => {
       v.src = objectUrl;
       v.preload = 'metadata';
       await new Promise((resolve) => {
-        v.onloadedmetadata = () => {
+        const handleReady = () => {
           duration = v.duration || 5.0;
           width = v.videoWidth;
           height = v.videoHeight;
           resolve(null);
+        };
+
+        v.onloadedmetadata = () => {
+          if (v.duration === Infinity) {
+            v.currentTime = 1e8;
+            v.ondurationchange = () => {
+              v.currentTime = 0;
+              handleReady();
+            };
+          } else {
+            handleReady();
+          }
         };
         v.onerror = () => resolve(null);
       });
@@ -64,9 +76,21 @@ export const MediaLibraryTab: React.FC = () => {
       a.src = objectUrl;
       a.preload = 'metadata';
       await new Promise((resolve) => {
-        a.onloadedmetadata = () => {
+        const handleReady = () => {
           duration = a.duration || 5.0;
           resolve(null);
+        };
+
+        a.onloadedmetadata = () => {
+          if (a.duration === Infinity) {
+            a.currentTime = 1e8;
+            a.ondurationchange = () => {
+              a.currentTime = 0;
+              handleReady();
+            };
+          } else {
+            handleReady();
+          }
         };
         a.onerror = () => resolve(null);
       });

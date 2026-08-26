@@ -71,7 +71,7 @@ export const Sidebar: React.FC = () => {
       {/* Mobile Backdrop */}
       {isSidebarOpen && (
         <div 
-          className="md:hidden fixed inset-0 z-40 bg-black/50 transition-opacity" 
+          className="md:hidden fixed inset-0 z-30 bg-black/50 transition-opacity" 
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
@@ -82,7 +82,7 @@ export const Sidebar: React.FC = () => {
         md:w-96 md:static md:flex-row md:border-r md:border-editor-border md:translate-y-0
         fixed left-0 right-0 bottom-16 rounded-t-2xl shadow-[0_-10px_40px_rgba(0,0,0,0.5)] border-t border-editor-border
         transition-transform duration-300 ease-in-out
-        ${isSidebarOpen ? 'translate-y-0' : 'translate-y-[120%] md:translate-y-0'}
+        ${isSidebarOpen ? 'translate-y-0 pointer-events-auto visible' : 'translate-y-full md:translate-y-0 pointer-events-none invisible md:pointer-events-auto md:visible'}
         h-[55vh] md:h-auto
       `}>
         {/* Desktop Left Rail (Hidden on mobile) */}

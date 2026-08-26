@@ -139,10 +139,10 @@ export const TimelineToolbar: React.FC = () => {
         <div className="h-4 w-px bg-editor-border" />
 
         {/* Timeline Zoom Controls */}
-        <div className="hidden sm:flex items-center gap-1.5 text-slate-400">
+        <div className="flex items-center gap-1 text-slate-400">
           <button
             onClick={() => setZoom(zoom - 10)}
-            className="p-1 rounded hover:bg-editor-hover hover:text-slate-200"
+            className="p-1.5 rounded hover:bg-editor-hover hover:text-slate-200"
             title="Zoom Out (-)"
           >
             <ZoomOut className="w-3.5 h-3.5" />
@@ -155,13 +155,13 @@ export const TimelineToolbar: React.FC = () => {
             step="5"
             value={zoom}
             onChange={(e) => setZoom(Number(e.target.value))}
-            className="w-20 h-1 bg-editor-darker rounded cursor-pointer"
+            className="hidden sm:block w-20 h-1 bg-editor-darker rounded cursor-pointer"
             title={`Timeline Zoom: ${zoom}px/sec`}
           />
 
           <button
             onClick={() => setZoom(zoom + 10)}
-            className="p-1 rounded hover:bg-editor-hover hover:text-slate-200"
+            className="p-1.5 rounded hover:bg-editor-hover hover:text-slate-200"
             title="Zoom In (+)"
           >
             <ZoomIn className="w-3.5 h-3.5" />

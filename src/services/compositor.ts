@@ -10,6 +10,10 @@ export class VideoCompositor {
   private imagePool: Map<string, HTMLImageElement> = new Map();
   private lastRenderTime: number = -1;
   private hiddenContainer: HTMLDivElement | null = null;
+  /** Track which videos have been loaded to avoid calling load() every frame */
+  private videoLoadRequested: Set<string> = new Set();
+  /** Track videos that timed out loading */
+  private videoTimedOut: Set<string> = new Set();
 
   constructor() {
     // Create a hidden container for media elements to prevent browsers
@@ -51,7 +55,11 @@ export class VideoCompositor {
       const el = this.videoPool.get(clipId)!;
       if (el.getAttribute('src') !== src) {
         el.src = src;
+        this.videoLoadRequested.delete(clipId);
+        this.videoTimedOut.delete(clipId);
         el.load();
+        this.videoLoadRequested.add(clipId);
+        this.startLoadTimeout(clipId);
       }
       return el;
     }
@@ -65,6 +73,7 @@ export class VideoCompositor {
     
     // Explicitly call load to force the browser to begin fetching metadata
     video.load();
+    this.videoLoadRequested.add(clipId);
 
     // Debugging listeners in case the browser blocks the load
     video.onerror = () => console.error(`[VideoCompositor] Error loading video ${src}:`, video.error);
@@ -76,7 +85,32 @@ export class VideoCompositor {
     }
 
     this.videoPool.set(clipId, video);
+
+    // Start a load timeout
+    this.startLoadTimeout(clipId);
+
     return video;
+  }
+
+  /** Start a timeout — if video isn't ready in 15 seconds, mark it timed out */
+  private startLoadTimeout(clipId: string) {
+    const video = this.videoPool.get(clipId);
+    if (!video) return;
+
+    // Listen for canplay to clear the timeout flag
+    const onCanPlay = () => {
+      this.videoTimedOut.delete(clipId);
+      video.removeEventListener('canplay', onCanPlay);
+    };
+    video.addEventListener('canplay', onCanPlay);
+
+    // Set a generous timeout — remote videos on mobile can be slow
+    setTimeout(() => {
+      if (video.readyState < 2 && !video.error) {
+        console.warn(`[VideoCompositor] Video load timeout for clip ${clipId}`);
+        this.videoTimedOut.add(clipId);
+      }
+    }, 15000);
   }
 
   // Pre-load or retrieve image element
@@ -255,7 +289,7 @@ export class VideoCompositor {
     const video = this.getVideoElement(clip.id, clip.src);
 
     if (isPlaying) {
-      if (video.paused) {
+      if (video.paused && video.readyState >= 2) {
         // Suppress play interruption errors
         video.play().catch(() => {});
       }
@@ -317,26 +351,37 @@ export class VideoCompositor {
       const renderH = vHeight * ratio;
 
       ctx.drawImage(video, -renderW / 2, -renderH / 2, renderW, renderH);
-    } else if (video.error) {
-      // Draw error placeholder with proper bounds
-      const pWidth = clip.transform?.scale ? (clip.transform.scale * 1280) / clip.transform.scale : 1280;
-      const pHeight = clip.transform?.scale ? (clip.transform.scale * 720) / clip.transform.scale : 720;
+    } else if (video.error || this.videoTimedOut.has(clip.id)) {
+      // Draw error / timeout placeholder
       ctx.fillStyle = '#161922';
-      ctx.fillRect(-pWidth / 2, -pHeight / 2, pWidth, pHeight);
+      ctx.fillRect(-640, -360, 1280, 720);
       ctx.fillStyle = '#ef4444'; // Red error text
       ctx.font = '24px Inter, sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(`Error: ${clip.name}`, 0, 0);
+      if (this.videoTimedOut.has(clip.id)) {
+        ctx.fillText(`Video load timeout: ${clip.name}`, 0, -10);
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '18px Inter, sans-serif';
+        ctx.fillText('Video may be too large for mobile', 0, 20);
+      } else {
+        ctx.fillText(`Error: ${clip.name}`, 0, 0);
+      }
     } else {
-      // Placeholder animated tech grid if loading
-      const pWidth = clip.transform?.scale ? (clip.transform.scale * 1280) / clip.transform.scale : 1280;
-      const pHeight = clip.transform?.scale ? (clip.transform.scale * 720) / clip.transform.scale : 720;
+      // Placeholder if loading
       ctx.fillStyle = '#161922';
-      ctx.fillRect(-pWidth / 2, -pHeight / 2, pWidth, pHeight);
+      ctx.fillRect(-640, -360, 1280, 720);
       ctx.fillStyle = '#6366f1';
       ctx.font = '24px Inter, sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(`Loading video: ${clip.name}...`, 0, 0);
+      ctx.fillText(`Loading video: ${clip.name}...`, 0, -10);
+
+      // Show a subtle loading spinner
+      const spinAngle = (performance.now() / 600) % (Math.PI * 2);
+      ctx.strokeStyle = '#6366f1';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(0, 30, 15, spinAngle, spinAngle + Math.PI * 1.5);
+      ctx.stroke();
     }
     ctx.restore();
   }
@@ -424,6 +469,7 @@ export class VideoCompositor {
     let animScale = 1.0;
     let animAlpha = 1.0;
     let animYOffset = 0;
+    let neonShadowBlur: number | null = null;
 
     switch (textData.animation) {
       case 'fade-in': {
@@ -454,8 +500,9 @@ export class VideoCompositor {
         break;
       }
       case 'neon-pulse': {
+        // Use a local variable — don't mutate the shared state object
         const pulse = (Math.sin(clipTime * 6) + 1) / 2;
-        textData.shadowBlur = 15 + pulse * 20;
+        neonShadowBlur = 15 + pulse * 20;
         break;
       }
       case 'karaoke-highlight': {
@@ -498,7 +545,7 @@ export class VideoCompositor {
     // Shadow
     if (textData.shadowColor) {
       ctx.shadowColor = textData.shadowColor;
-      ctx.shadowBlur = textData.shadowBlur || 10;
+      ctx.shadowBlur = neonShadowBlur !== null ? neonShadowBlur : (textData.shadowBlur || 10);
       ctx.shadowOffsetX = textData.shadowOffsetX || 0;
       ctx.shadowOffsetY = textData.shadowOffsetY || 0;
     }
@@ -576,6 +623,8 @@ export class VideoCompositor {
     });
     this.videoPool.clear();
     this.imagePool.clear();
+    this.videoLoadRequested.clear();
+    this.videoTimedOut.clear();
     if (this.hiddenContainer) {
       this.hiddenContainer.remove();
       this.hiddenContainer = null;

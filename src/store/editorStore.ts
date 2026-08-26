@@ -161,27 +161,7 @@ export const createDefaultProject = (): Project => {
     isLocked: false,
     isHidden: false,
     volume: 0.8,
-    clips: [
-      {
-        id: 'clip_audio_1',
-        trackId: 'track_a1',
-        name: 'Electric Horizon (Synth BGM)',
-        type: 'audio',
-        assetId: 'audio_upbeat_1',
-        startTime: 0,
-        duration: 16.0,
-        trimIn: 0,
-        trimOut: 16.0,
-        sourceDuration: 20.0,
-        speed: 1.0,
-        volume: 0.75,
-        fadeIn: 1.0,
-        fadeOut: 1.5,
-        transform: { x: 0, y: 0, scale: 1.0, rotation: 0, opacity: 1.0, blendMode: 'normal' },
-        filters: { ...DEFAULT_FILTER_SETTINGS },
-        colorTag: '#10b981',
-      },
-    ],
+    clips: [],
   };
 
   const tracks = [textTrack, videoTrack, audioTrack];
@@ -209,6 +189,7 @@ export interface EditorStore {
   project: Project;
   currentTime: number;
   isPlaying: boolean;
+  isLooping: boolean;
   isMuted: boolean;
   masterVolume: number;
   zoom: number; // pixels per second (10 - 150)
@@ -225,6 +206,7 @@ export interface EditorStore {
   // Setters
   setCurrentTime: (time: number) => void;
   setIsPlaying: (playing: boolean) => void;
+  setIsLooping: (looping: boolean) => void;
   togglePlay: () => void;
   setMasterVolume: (vol: number) => void;
   toggleMute: () => void;
@@ -250,9 +232,9 @@ export interface EditorStore {
 
   // Clip actions
   addClip: (trackId: string, clipData: Partial<Clip>) => void;
-  updateClip: (clipId: string, updates: Partial<Clip>) => void;
-  moveClip: (clipId: string, targetTrackId: string, newStartTime: number) => void;
-  trimClip: (clipId: string, newStartTime: number, newDuration: number, newTrimIn: number) => void;
+  updateClip: (clipId: string, updates: Partial<Clip>, saveHistory?: boolean) => void;
+  moveClip: (clipId: string, targetTrackId: string, newStartTime: number, saveHistory?: boolean) => void;
+  trimClip: (clipId: string, newStartTime: number, newDuration: number, newTrimIn: number, saveHistory?: boolean) => void;
   splitClip: (clipId: string, splitTime?: number) => void;
   deleteClip: (clipId: string) => void;
   duplicateClip: (clipId: string) => void;
@@ -294,6 +276,7 @@ export const useEditorStore = create<EditorStore>((set, get) => {
     project: initialProject,
     currentTime: 0,
     isPlaying: false,
+    isLooping: false,
     isMuted: false,
     masterVolume: 1.0,
     zoom: 45,
@@ -314,6 +297,7 @@ export const useEditorStore = create<EditorStore>((set, get) => {
     },
 
     setIsPlaying: (isPlaying) => set({ isPlaying }),
+    setIsLooping: (isLooping) => set({ isLooping }),
 
     togglePlay: () => {
       const { isPlaying, currentTime, project } = get();
@@ -473,9 +457,9 @@ export const useEditorStore = create<EditorStore>((set, get) => {
       StorageService.saveProject(updated);
     },
 
-    updateClip: (clipId, updates) => {
+    updateClip: (clipId, updates, saveHistory = true) => {
       const { project } = get();
-      const history = recordHistory(project);
+      const history = saveHistory ? recordHistory(project) : get().history;
 
       const tracks = project.tracks.map((t) => ({
         ...t,
@@ -490,12 +474,12 @@ export const useEditorStore = create<EditorStore>((set, get) => {
       };
 
       set({ project: updated, history });
-      StorageService.saveProject(updated);
+      if (saveHistory) StorageService.saveProject(updated);
     },
 
-    moveClip: (clipId, targetTrackId, newStartTime) => {
+    moveClip: (clipId, targetTrackId, newStartTime, saveHistory = true) => {
       const { project, snappingEnabled } = get();
-      const history = recordHistory(project);
+      const history = saveHistory ? recordHistory(project) : get().history;
 
       let targetClip: Clip | null = null;
       let originalTrackId = '';
@@ -560,12 +544,12 @@ export const useEditorStore = create<EditorStore>((set, get) => {
       };
 
       set({ project: updated, history });
-      StorageService.saveProject(updated);
+      if (saveHistory) StorageService.saveProject(updated);
     },
 
-    trimClip: (clipId, newStartTime, newDuration, newTrimIn) => {
+    trimClip: (clipId, newStartTime, newDuration, newTrimIn, saveHistory = true) => {
       const { project } = get();
-      const history = recordHistory(project);
+      const history = saveHistory ? recordHistory(project) : get().history;
 
       const tracks = project.tracks.map((t) => ({
         ...t,
@@ -591,7 +575,7 @@ export const useEditorStore = create<EditorStore>((set, get) => {
       };
 
       set({ project: updated, history });
-      StorageService.saveProject(updated);
+      if (saveHistory) StorageService.saveProject(updated);
     },
 
     splitClip: (clipId, splitTime) => {

@@ -15,7 +15,7 @@ export const Timeline: React.FC = () => {
   const totalTracksHeight = project.tracks.length * 64 + 28; // 64px per track + 28px ruler
 
   return (
-    <div className="h-64 md:h-72 border-t border-editor-border bg-editor-panel flex flex-col select-none relative z-10 overflow-hidden">
+    <div className="h-44 md:h-64 border-t border-editor-border bg-editor-panel flex flex-col select-none relative z-10 overflow-hidden">
       {/* Top Controls Toolbar */}
       <TimelineToolbar />
 

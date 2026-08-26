@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useEditorStore } from '../../store/editorStore';
+import { useShallow } from 'zustand/react/shallow';
 import { audioEngine } from '../../services/audioEngine';
 import { 
   Play, 
@@ -35,24 +36,36 @@ export const PlayerControls: React.FC<PlayerControlsProps> = ({
     toggleMute,
     masterVolume,
     setMasterVolume,
-  } = useEditorStore();
+    isLooping,
+    setIsLooping,
+  } = useEditorStore(useShallow(state => ({
+    currentTime: state.currentTime,
+    setCurrentTime: state.setCurrentTime,
+    isPlaying: state.isPlaying,
+    togglePlay: state.togglePlay,
+    project: state.project,
+    isMuted: state.isMuted,
+    toggleMute: state.toggleMute,
+    masterVolume: state.masterVolume,
+    setMasterVolume: state.setMasterVolume,
+    isLooping: state.isLooping,
+    setIsLooping: state.setIsLooping,
+  })));
 
-  const [isLooping, setIsLooping] = useState(false);
   const [meterLevels, setMeterLevels] = useState<{ left: number; right: number }>({ left: 0, right: 0 });
 
-  // Update stereo audio meter
+  // Update stereo audio meter — throttled to 10fps, only when playing
   useEffect(() => {
-    let animId: number;
-    const updateMeter = () => {
-      if (isPlaying) {
-        setMeterLevels(audioEngine.getAudioLevels());
-      } else {
-        setMeterLevels({ left: 0, right: 0 });
-      }
-      animId = requestAnimationFrame(updateMeter);
-    };
-    animId = requestAnimationFrame(updateMeter);
-    return () => cancelAnimationFrame(animId);
+    if (!isPlaying) {
+      setMeterLevels({ left: 0, right: 0 });
+      return;
+    }
+
+    const intervalId = setInterval(() => {
+      setMeterLevels(audioEngine.getAudioLevels());
+    }, 100); // 10fps — plenty for a VU meter visual
+
+    return () => clearInterval(intervalId);
   }, [isPlaying]);
 
   // Format time to HH:MM:SS:FF

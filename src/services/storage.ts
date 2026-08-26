@@ -6,14 +6,6 @@ const PROJECT_PREFIX = 'vidsync_proj_';
 const ASSET_BLOB_PREFIX = 'vidsync_blob_';
 const LAST_ACTIVE_KEY = 'vidsync_last_active_project';
 
-// Mappings for old CORS-blocked stock videos
-const LEGACY_URL_MAPPING: { pattern: string; newUrl: string }[] = [
-  { pattern: 'ForBiggerBlazes.mp4', newUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/c0/Big_Buck_Bunny_4K.webm' },
-  { pattern: 'ForBiggerEscapes.mp4', newUrl: 'https://upload.wikimedia.org/wikipedia/commons/f/f1/Sintel_movie_4K.webm' },
-  { pattern: 'ForBiggerFun.mp4', newUrl: 'https://upload.wikimedia.org/wikipedia/commons/f/fc/Tears_of_Steel_in_4k_-_Official_Blender_Foundation_release.webm' },
-  { pattern: 'ForBiggerJoyrides.mp4', newUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/30/Elephants_Dream_%281080p_24fps%29.webm' },
-  { pattern: 'ForBiggerMeltdowns.mp4', newUrl: 'https://upload.wikimedia.org/wikipedia/commons/1/18/Caminandes_3_-_Llamigos_-_1080p.webm' },
-];
 
 export const StorageService = {
   async saveProject(project: Project): Promise<void> {
