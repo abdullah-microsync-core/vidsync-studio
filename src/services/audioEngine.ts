@@ -1,4 +1,5 @@
 import { Clip, Track } from '../types/editor';
+import { useEditorStore } from '../store/editorStore';
 
 class AudioEngine {
   private ctx: AudioContext | null = null;
@@ -271,6 +272,13 @@ class AudioEngine {
             }
 
             if (buffer) {
+              const liveState = useEditorStore.getState();
+              if (!liveState.isPlaying) return; // User paused while loading
+              if (liveState.currentTime >= clipEnd) return; // Playhead passed this clip
+
+              const liveOffsetInClip = (liveState.currentTime - clip.startTime) * clip.speed + clip.trimIn;
+              const liveRemainingDuration = clipEnd - liveState.currentTime;
+
               const source = ctx.createBufferSource();
               source.buffer = buffer;
               source.playbackRate.value = clip.speed || 1.0;
@@ -283,8 +291,8 @@ class AudioEngine {
               source.connect(gainNode);
               gainNode.connect(this.masterGain!);
 
-              const safeOffset = Math.max(0, Math.min(buffer.duration - 0.05, offsetInClip));
-              source.start(0, safeOffset, remainingDuration);
+              const safeOffset = Math.max(0, Math.min(buffer.duration - 0.05, liveOffsetInClip));
+              source.start(0, safeOffset, liveRemainingDuration);
               this.activeSources.set(clip.id, source);
             }
           } catch (err) {
