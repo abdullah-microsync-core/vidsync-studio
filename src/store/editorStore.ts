@@ -451,7 +451,7 @@ export const useEditorStore = create<EditorStore>((set, get) => {
         );
         
         if (!hasVisualClips && clipData.assetId) {
-          const asset = project.media.find(m => m.id === clipData.assetId);
+          const asset = project.assets.find(m => m.id === clipData.assetId);
           if (asset && asset.width && asset.height) {
             const ratio = asset.width / asset.height;
             if (ratio > 2.0) newAspectRatio = '21:9';
