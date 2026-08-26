@@ -14,6 +14,9 @@ export class VideoCompositor {
   private videoLoadRequested: Set<string> = new Set();
   /** Track videos that timed out loading */
   private videoTimedOut: Set<string> = new Set();
+  
+  /** Indicates if any video clip in the current frame is still loading */
+  public isRenderingLoading: boolean = false;
 
   constructor() {
     // Create a hidden container for media elements to prevent browsers
@@ -135,6 +138,7 @@ export class VideoCompositor {
     selectedClipId?: string | null,
     isPlaying: boolean = false
   ): void {
+    this.isRenderingLoading = false;
     const ctx = canvas.getContext('2d', { alpha: false });
     if (!ctx) return;
 
@@ -367,6 +371,7 @@ export class VideoCompositor {
         ctx.fillText(`Error: ${clip.name}`, 0, 0);
       }
     } else {
+      this.isRenderingLoading = true;
       // Placeholder if loading
       ctx.fillStyle = '#161922';
       ctx.fillRect(-640, -360, 1280, 720);

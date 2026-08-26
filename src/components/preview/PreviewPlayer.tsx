@@ -68,8 +68,8 @@ export const PreviewPlayer: React.FC = () => {
       timeSinceLastRender += rawDelta;
       const timeChanged = state.currentTime !== lastRenderedTimeRef.current;
       const shouldRender = state.isPlaying
-        ? timeSinceLastRender >= minFrameInterval  // Throttle when playing
-        : timeChanged;                              // Only render on scrub when paused
+        ? timeSinceLastRender >= minFrameInterval
+        : (timeChanged || compositor.isRenderingLoading) && (timeSinceLastRender >= minFrameInterval || timeChanged);
 
       if (shouldRender) {
         timeSinceLastRender = 0;
