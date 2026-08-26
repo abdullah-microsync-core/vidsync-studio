@@ -270,7 +270,7 @@ class AudioEngine {
               buffer = await this.loadAudioBuffer(clip.src);
             }
 
-            if (buffer && ctx.state === 'running') {
+            if (buffer) {
               const source = ctx.createBufferSource();
               source.buffer = buffer;
               source.playbackRate.value = clip.speed || 1.0;
