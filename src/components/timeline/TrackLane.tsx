@@ -50,7 +50,7 @@ export const TrackLane: React.FC<TrackLaneProps> = ({ track, totalWidth }) => {
         assetId: asset.id,
         src: asset.url,
         startTime,
-        duration: asset.type === 'image' ? 5.0 : Math.min(10.0, asset.duration || 5.0),
+        duration: asset.type === 'image' ? 5.0 : (asset.duration || 5.0),
         sourceDuration: asset.duration || 5.0,
       });
     } catch {

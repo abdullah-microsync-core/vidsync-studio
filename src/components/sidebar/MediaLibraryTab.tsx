@@ -154,10 +154,10 @@ export const MediaLibraryTab: React.FC = () => {
       assetId: asset.id,
       src: asset.url,
       startTime: currentTime,
-      duration: asset.type === 'image' ? 5.0 : Math.min(10.0, asset.duration || 5.0),
+      duration: asset.type === 'image' ? 5.0 : (asset.duration || 5.0),
       sourceDuration: asset.duration || 5.0,
       trimIn: 0,
-      trimOut: asset.type === 'image' ? 5.0 : Math.min(10.0, asset.duration || 5.0),
+      trimOut: asset.type === 'image' ? 5.0 : (asset.duration || 5.0),
     });
   };
 
