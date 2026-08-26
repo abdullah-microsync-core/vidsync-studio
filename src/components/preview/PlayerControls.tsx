@@ -143,6 +143,8 @@ export const PlayerControls: React.FC<PlayerControlsProps> = ({
           onClick={() => {
             if (!isPlaying) {
               compositor.unlockMobileVideos();
+              // Synchronously unlock AudioContext inside user gesture
+              audioEngine.getAudioContext().resume().catch(() => {});
             }
             togglePlay();
           }}

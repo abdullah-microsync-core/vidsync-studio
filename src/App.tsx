@@ -9,6 +9,8 @@ import { ExportModal } from './components/export/ExportModal';
 import { ProjectDashboardModal } from './components/header/ProjectDashboardModal';
 
 import { updateProjectWithFreshStockAssets } from './services/stockAssets';
+import { audioEngine } from './services/audioEngine';
+import { compositor } from './services/compositor';
 
 export const App: React.FC = () => {
   // Load last active project from storage on startup
@@ -55,6 +57,10 @@ export const App: React.FC = () => {
       // Space -> Play / Pause
       if (e.code === 'Space') {
         e.preventDefault();
+        if (!state.isPlaying) {
+          compositor.unlockMobileVideos();
+          audioEngine.getAudioContext().resume().catch(() => {});
+        }
         togglePlay();
       }
       // S -> Split active clip
