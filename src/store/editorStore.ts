@@ -442,6 +442,27 @@ export const useEditorStore = create<EditorStore>((set, get) => {
         colorTag: clipData.colorTag || (clipData.type === 'video' ? '#6366f1' : clipData.type === 'audio' ? '#10b981' : '#ec4899'),
       };
 
+      let newAspectRatio = project.aspectRatio;
+      
+      // Auto-adjust aspect ratio if this is the first visual clip added to the timeline
+      if (clipData.type === 'video' || clipData.type === 'image') {
+        const hasVisualClips = project.tracks.some(t => 
+          (t.type === 'video' || t.type === 'overlay') && t.clips.length > 0
+        );
+        
+        if (!hasVisualClips && clipData.assetId) {
+          const asset = project.media.find(m => m.id === clipData.assetId);
+          if (asset && asset.width && asset.height) {
+            const ratio = asset.width / asset.height;
+            if (ratio > 2.0) newAspectRatio = '21:9';
+            else if (ratio > 1.2) newAspectRatio = '16:9';
+            else if (ratio > 0.9) newAspectRatio = '1:1';
+            else if (ratio > 0.7) newAspectRatio = '4:5';
+            else newAspectRatio = '9:16';
+          }
+        }
+      }
+
       const tracks = project.tracks.map((t) =>
         t.id === trackId ? { ...t, clips: [...t.clips, newClip].sort((a, b) => a.startTime - b.startTime) } : t
       );
@@ -449,6 +470,7 @@ export const useEditorStore = create<EditorStore>((set, get) => {
       const updated = {
         ...project,
         tracks,
+        aspectRatio: newAspectRatio,
         duration: calculateTotalDuration(tracks),
         updatedAt: Date.now(),
       };
