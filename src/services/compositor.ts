@@ -343,10 +343,10 @@ export class VideoCompositor {
     if (transform.rotation) ctx.rotate((transform.rotation * Math.PI) / 180);
     ctx.scale(transform.scale || 1, transform.scale || 1);
 
-    if (video.readyState >= 2) {
-      // Calculate aspect-fit drawing
-      const vWidth = video.videoWidth || width;
-      const vHeight = video.videoHeight || height;
+    const vWidth = video.videoWidth || width;
+    const vHeight = video.videoHeight || height;
+    
+    if (vWidth > 0 && vHeight > 0) {
       const hRatio = width / vWidth;
       const vRatio = height / vHeight;
       const ratio = Math.max(hRatio, vRatio); // Cover fit
@@ -354,11 +354,17 @@ export class VideoCompositor {
       const renderW = vWidth * ratio;
       const renderH = vHeight * ratio;
 
-      ctx.drawImage(video, -renderW / 2, -renderH / 2, renderW, renderH);
-    } else if (video.error || this.videoTimedOut.has(clip.id)) {
-      // Draw error / timeout placeholder
-      ctx.fillStyle = '#161922';
-      ctx.fillRect(-640, -360, 1280, 720);
+      try {
+        ctx.drawImage(video, -renderW / 2, -renderH / 2, renderW, renderH);
+      } catch (e) {
+        // Ignore drawImage errors (e.g. if readyState is 0 and browser throws)
+      }
+    }
+
+    if (video.error || this.videoTimedOut.has(clip.id)) {
+      // Draw error / timeout placeholder ONLY if we failed to draw anything, or as an overlay
+      ctx.fillStyle = 'rgba(22, 25, 34, 0.8)';
+      ctx.fillRect(-width / 2, -height / 2, width, height);
       ctx.fillStyle = '#ef4444'; // Red error text
       ctx.font = '24px Inter, sans-serif';
       ctx.textAlign = 'center';
@@ -370,22 +376,14 @@ export class VideoCompositor {
       } else {
         ctx.fillText(`Error: ${clip.name}`, 0, 0);
       }
-    } else {
+    } else if (video.readyState < 2) {
       this.isRenderingLoading = true;
-      // Placeholder if loading
-      ctx.fillStyle = '#161922';
-      ctx.fillRect(-640, -360, 1280, 720);
-      ctx.fillStyle = '#6366f1';
-      ctx.font = '24px Inter, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText(`Loading video: ${clip.name}...`, 0, -10);
-
-      // Show a subtle loading spinner
+      // Show a subtle loading spinner overlay (no black box)
       const spinAngle = (performance.now() / 600) % (Math.PI * 2);
-      ctx.strokeStyle = '#6366f1';
-      ctx.lineWidth = 3;
+      ctx.strokeStyle = 'rgba(99, 102, 241, 0.8)';
+      ctx.lineWidth = 4;
       ctx.beginPath();
-      ctx.arc(0, 30, 15, spinAngle, spinAngle + Math.PI * 1.5);
+      ctx.arc(0, 0, 20, spinAngle, spinAngle + Math.PI);
       ctx.stroke();
     }
     ctx.restore();
