@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useEditorStore } from '../../store/editorStore';
 import { useShallow } from 'zustand/react/shallow';
 import { audioEngine } from '../../services/audioEngine';
+import { compositor } from '../../services/compositor';
 import { 
   Play, 
   Pause, 
@@ -139,7 +140,12 @@ export const PlayerControls: React.FC<PlayerControlsProps> = ({
 
         {/* Big Center Play/Pause Button */}
         <button
-          onClick={togglePlay}
+          onClick={() => {
+            if (!isPlaying) {
+              compositor.unlockMobileVideos();
+            }
+            togglePlay();
+          }}
           className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all ${
             isPlaying
               ? 'bg-editor-accent text-white shadow-lg shadow-indigo-500/40'

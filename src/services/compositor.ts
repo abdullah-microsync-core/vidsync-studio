@@ -24,12 +24,14 @@ export class VideoCompositor {
     if (typeof document !== 'undefined') {
       this.hiddenContainer = document.createElement('div');
       this.hiddenContainer.style.position = 'absolute';
-      this.hiddenContainer.style.left = '-9999px';
-      this.hiddenContainer.style.top = '-9999px';
+      this.hiddenContainer.style.left = '0';
+      this.hiddenContainer.style.top = '0';
       this.hiddenContainer.style.width = '1px';
       this.hiddenContainer.style.height = '1px';
-      this.hiddenContainer.style.opacity = '0';
+      this.hiddenContainer.style.opacity = '0.01'; // Not 0, to avoid Safari pausing decode
       this.hiddenContainer.style.pointerEvents = 'none';
+      this.hiddenContainer.style.zIndex = '-1';
+      this.hiddenContainer.style.overflow = 'hidden';
       this.hiddenContainer.id = 'vidsync-media-pool';
       document.body.appendChild(this.hiddenContainer);
     }
@@ -93,6 +95,19 @@ export class VideoCompositor {
     this.startLoadTimeout(clipId);
 
     return video;
+  }
+
+  /**
+   * Called from a synchronous user interaction (e.g. click Play) to bless all video
+   * elements with permission to play on iOS/Safari.
+   */
+  public unlockMobileVideos(): void {
+    this.videoPool.forEach((video) => {
+      const p = video.play();
+      if (p !== undefined) {
+        p.catch(() => {});
+      }
+    });
   }
 
   /** Start a timeout — if video isn't ready in 15 seconds, mark it timed out */
